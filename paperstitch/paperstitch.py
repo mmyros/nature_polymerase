@@ -19,6 +19,10 @@ def find_articles(driver, url, pattern):
     paths = [path for path in paths if path is not None]
     paths = [path for path in paths if 'ESM.pdf' not in path]
     paths = [path for path in paths if pattern in path]
+    if 'nature' in url:
+        # Skip external links from nature websites
+        paths = [path for path in paths if 'nature' not in path]
+
     paths = list(set(paths))
     print(f'Found articles: {paths}')
     return paths
@@ -45,7 +49,7 @@ def prep(url):
     profile.set_preference("plugin.disable_full_page_plugin_for_types", mime_types)
     profile.set_preference("pdfjs.disabled", True)
     driver = webdriver.Firefox(profile)
-    driver.set_page_load_timeout(4)
+    driver.set_page_load_timeout(8)
     # print('Logging you in to NIH. I give you 20 seconds')
     # driver.get('https://login.ezproxy.nihlibrary.nih.gov/login?url=http://www.nature.com/')
     # time.sleep(20)
@@ -57,8 +61,9 @@ def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/is
     # To prevent download dialog
     driver, save_path, save_folder=prep(url)
     driver.get(url)
-    time.sleep(4)
+    time.sleep(7)
     url=driver.current_url
+    driver.set_page_load_timeout(4)
     print(url)
     if ('browzine' in url) or ('nature' in url):
         paths = find_articles(driver, url, pattern='articles/')
