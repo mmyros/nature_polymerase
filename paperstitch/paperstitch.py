@@ -89,7 +89,7 @@ def get_fresh_issues():
     save_journal_issue('https://www.nature.com/nrn/current-issue')
     save_journal_issue('https://www.nature.com/npp/current-issue')
     save_journal_issue('https://www.nature.com/npjschz/current-issue')
-    save_journal_issue('https://www.nature.com/tp/current-issue')
+    # save_journal_issue('https://www.nature.com/tp/current-issue')
     save_journal_issue('https://science.sciencemag.org/')
 
 
