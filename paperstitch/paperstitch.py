@@ -63,7 +63,7 @@ def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/is
     driver.get(url)
     time.sleep(7)
     url=driver.current_url
-    driver.set_page_load_timeout(4)
+    driver.set_page_load_timeout(6)
     print(url)
     if ('browzine' in url) or ('nature' in url):
         paths = find_articles(driver, url, pattern='articles/')

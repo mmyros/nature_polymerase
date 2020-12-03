@@ -1417,3 +1417,8 @@ JavaScript error: resource://gre/modules/pdfjs.js, line 31: NS_ERROR_FACTORY_NOT
 console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
 1607005647017	Marionette	INFO	Listening on port 39091
 1607005647156	Marionette	WARN	TLS certificate errors will be ignored for this session
+1607009609230	geckodriver	INFO	Listening on 127.0.0.1:52619
+1607009609246	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileWsSr5R"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607009613205	Marionette	INFO	Listening on port 38885
+1607009613344	Marionette	WARN	TLS certificate errors will be ignored for this session
