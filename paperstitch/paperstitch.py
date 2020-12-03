@@ -21,7 +21,7 @@ def find_articles(driver, url, pattern):
     paths = [path for path in paths if pattern in path]
     if 'nature' in url:
         # Skip external links from nature websites
-        paths = [path for path in paths if 'nature' not in path]
+        paths = [path for path in paths if 'nature' in path]
 
     paths = list(set(paths))
     print(f'Found articles: {paths}')
