@@ -28,7 +28,9 @@ def find_articles(driver, url, pattern):
     return paths
 
 
-def prep(url):
+
+
+def make_save_folder(url):
     if 'browzine' in url:
         driver = webdriver.Firefox()
         driver.get(url)
@@ -41,29 +43,76 @@ def prep(url):
     else:
         save_folder = url[8:25]
     save_path = f'/home/m/Downloads/{save_folder}/'
+    return save_path, save_folder
+
+
+def prep(url=None, use_proxy=False):
     mime_types = "application/pdf,application/vnd.adobe.xfdf,application/vnd.fdf,application/vnd.adobe.xdp+xml"
     profile = webdriver.FirefoxProfile()
     profile.set_preference('browser.download.folderList', 2)  # custom location
     profile.set_preference('browser.download.manager.showWhenStarting', False)
-    profile.set_preference('browser.download.dir', save_path)
     profile.set_preference('browser.helperApps.neverAsk.saveToDisk', mime_types)
     profile.set_preference("plugin.disable_full_page_plugin_for_types", mime_types)
     profile.set_preference("pdfjs.disabled", True)
+    if url:
+        save_path, save_folder = make_save_folder(url)
+        profile.set_preference('browser.download.dir', save_path)
+    else:
+        save_path, save_folder = None, None
+    # Make selenium driver
     driver = webdriver.Firefox(profile)
+    driver.get("about:config")
     driver.set_page_load_timeout(8)
-    if 'ezproxy' in url:
-        print('Logging you in to NIH. I give you 20 seconds')
+    if use_proxy:
+        # Log in
+        print('Logging you in to ezproxy. I give you 20 seconds')
         driver.get('https://login.ezproxy.nihlibrary.nih.gov/login?url=http://www.nature.com/')
         time.sleep(20)
-    print(f'Saving to {save_path}')
     return driver, save_path, save_folder
 
 
 def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/issues/369227236?sort=title",
                        driver=None, save_path=None, save_folder=None):
+
+    def update_save_path(url):
+        def set_string_preference(name, value):
+            driver.execute_script("""
+            var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                .getService(Components.interfaces.nsIPrefBranch);
+            prefs.setBoolPref(arguments[0], arguments[1]);
+            """, name, value)
+
+        # def set_string_preference(name, value):
+        #     modified = driver.execute_script("""
+        #         document.getElementById("textbox").value = arguments[0];
+        #         FilterPrefs();
+        #         view.selection.currentIndex = 0;
+        #
+        #         if (view.rowCount == 1) {
+        #            current_value = view.getCellText(0, {id:"valeuCol"});
+        #            if (current_value != arguments[1]) {
+        #                ModifySelected();
+        #                return true;
+        #            }
+        #         }
+        #
+        #         return false;
+        #     """, name, value)
+
+            # if modified is None or modified is True:
+            #     alert = driver.switch_to.alert
+            #     alert.send_keys(value)
+            #     alert.accept()
+
+        save_path, save_folder = make_save_folder(url)
+        print(f'Saving to {save_path}')
+        set_string_preference('browser.download.dir', save_path)
+        return save_path, save_folder
     # To prevent download dialog
     if not driver:
         driver, save_path, save_folder = prep(url)
+    else:
+        save_path, save_folder = update_save_path( url)
     driver.get(url)
     time.sleep(7)
     url = driver.current_url
@@ -75,6 +124,8 @@ def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/is
     elif 'sciencemag' in url:
         paths = [url]
         pdf_pattern = 'full.pdf'
+    else:
+        raise NotImplementedError(f'{url} is not implemented')
 
     # Download pdfs
     for path in tqdm(paths):
@@ -104,14 +155,18 @@ def get_fresh_issues():
 
 
 def get_fresh_issues_proxy():
-    for url in ['https://www-nature-com.ezproxy.nihlibrary.nih.gov/neuro/current-issue',
-                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nature/current-issue',
-                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nrn/current-issue',
-                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npp/current-issue',
-                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npjschz/current-issue',
-                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/tp/current-issue',
-                'https://science-sciencemag-org.ezproxy.nihlibrary.nih.gov/', ]:
-        save_journal_issue(url, *prep(url))
+    driver, save_path, save_folder = prep(use_proxy=False)
+    for url in [
+        'https://www.nature.com/neuro/current-issue',
+        'https://www-nature-com/nature/current-issue',
+        'https://www-nature-com.ezproxy.nihlibrary.nih.gov/neuro/current-issue',
+        'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nature/current-issue',
+        'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nrn/current-issue',
+        'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npp/current-issue',
+        'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npjschz/current-issue',
+        'https://www-nature-com.ezproxy.nihlibrary.nih.gov/tp/current-issue',
+        'https://science-sciencemag-org.ezproxy.nihlibrary.nih.gov/', ]:
+        save_journal_issue(url, driver, save_path, save_folder)
 
     if __name__ == '__main__':
         get_fresh_issues_proxy()
