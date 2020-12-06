@@ -27,7 +27,10 @@ def find_articles(driver, url, pattern):
         paths = [path for path in paths if 'nature' in path]
 
     paths = list(set(paths))
+    import numpy as np
+    paths = list(np.sort(paths))
     print(f'Found articles: {paths}')
+
     return paths
 
 
@@ -128,14 +131,14 @@ def get_fresh_issues():
 def get_fresh_issues_proxy():
     driver, save_path = prep(use_proxy=True)
     for url in [
-        # 'https://www.nature.com/neuro/current-issue',
+        # 'https://www.nature.com/neuro/current-issue',# keep for testing
         # 'https://www.nature.com/nature/current-issue',
         'https://www-nature-com.ezproxy.nihlibrary.nih.gov/neuro/current-issue',
         'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nature/current-issue',
         'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nrn/current-issue',
         'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npp/current-issue',
         'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npjschz/current-issue',
-        'https://www-nature-com.ezproxy.nihlibrary.nih.gov/tp/current-issue',
+        # 'https://www-nature-com.ezproxy.nihlibrary.nih.gov/tp/current-issue',
         'https://science-sciencemag-org.ezproxy.nihlibrary.nih.gov/', ]:
         save_journal_issue(url, driver, save_path)
 

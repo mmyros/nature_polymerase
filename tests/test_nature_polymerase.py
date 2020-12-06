@@ -24,6 +24,9 @@ def test_content(response):
     """Sample pytest test function with the pytest fixture as an argument."""
     # from bs4 import BeautifulSoup
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
+    from pathlib import Path
+    Path('~/Downloads/').expanduser().mkdir(exist_ok=True)
+    nature_polymerase.get_fresh_issues()
 
 
 def test_command_line_interface():

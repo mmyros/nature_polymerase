@@ -6,7 +6,7 @@ from nature_polymerase import nature_polymerase
 
 @click.command(context_settings={"ignore_unknown_options": True})
 @click.option('--url', default=None)
-@click.option('--use_proxy', default=True)
+@click.option('--use_proxy', default=True, type=bool)
 def main(url=None, use_proxy=True):
     """Console script for nature_polymerase."""
     if url is not None:
