@@ -10,7 +10,8 @@ def main(url=None):
     if url is not None:
         paperstitch.save_journal_issue(url)
     else:
-        paperstitch.get_fresh_issues()
+        # paperstitch.get_fresh_issues()
+        paperstitch.get_fresh_issues_proxy()
     return 0
 
 

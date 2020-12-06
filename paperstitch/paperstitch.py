@@ -27,6 +27,7 @@ def find_articles(driver, url, pattern):
     print(f'Found articles: {paths}')
     return paths
 
+
 def prep(url):
     if 'browzine' in url:
         driver = webdriver.Firefox()
@@ -38,7 +39,7 @@ def prep(url):
     elif ('nature' in url) and ('current-issue' in url):
         save_folder = f'nature_{url.split("/")[-2]}'
     else:
-        save_folder=url[8:25]
+        save_folder = url[8:25]
     save_path = f'/home/m/Downloads/{save_folder}/'
     mime_types = "application/pdf,application/vnd.adobe.xfdf,application/vnd.fdf,application/vnd.adobe.xdp+xml"
     profile = webdriver.FirefoxProfile()
@@ -50,19 +51,22 @@ def prep(url):
     profile.set_preference("pdfjs.disabled", True)
     driver = webdriver.Firefox(profile)
     driver.set_page_load_timeout(8)
-    # print('Logging you in to NIH. I give you 20 seconds')
-    # driver.get('https://login.ezproxy.nihlibrary.nih.gov/login?url=http://www.nature.com/')
-    # time.sleep(20)
+    if 'ezproxy' in url:
+        print('Logging you in to NIH. I give you 20 seconds')
+        driver.get('https://login.ezproxy.nihlibrary.nih.gov/login?url=http://www.nature.com/')
+        time.sleep(20)
     print(f'Saving to {save_path}')
-    return driver,save_path,save_folder
+    return driver, save_path, save_folder
 
 
-def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/issues/369227236?sort=title"):
+def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/issues/369227236?sort=title",
+                       driver=None, save_path=None, save_folder=None):
     # To prevent download dialog
-    driver, save_path, save_folder=prep(url)
+    if not driver:
+        driver, save_path, save_folder = prep(url)
     driver.get(url)
     time.sleep(7)
-    url=driver.current_url
+    url = driver.current_url
     driver.set_page_load_timeout(6)
     print(url)
     if ('browzine' in url) or ('nature' in url):
@@ -86,7 +90,8 @@ def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/is
     print(f'cd {save_path}; pdfunite $(ls -tr *.pdf) ../journals/{save_folder}.pdf')
     os.system(f'cd {save_path}; pdfunite $(ls -tr *.pdf) ../journals/{save_folder}.pdf')
     print(f'Done! use the following command to open with okular: \nokular ~/Downloads/journals/{save_folder}.pdf')
-    driver.close()
+    # driver.close()
+
 
 def get_fresh_issues():
     save_journal_issue('https://www.nature.com/neuro/current-issue')
@@ -98,5 +103,15 @@ def get_fresh_issues():
     save_journal_issue('https://science.sciencemag.org/')
 
 
-if __name__ == '__main__':
-    get_fresh_issues()
+def get_fresh_issues_proxy():
+    for url in ['https://www-nature-com.ezproxy.nihlibrary.nih.gov/neuro/current-issue',
+                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nature/current-issue',
+                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/nrn/current-issue',
+                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npp/current-issue',
+                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npjschz/current-issue',
+                'https://www-nature-com.ezproxy.nihlibrary.nih.gov/tp/current-issue',
+                'https://science-sciencemag-org.ezproxy.nihlibrary.nih.gov/', ]:
+        save_journal_issue(url, *prep(url))
+
+    if __name__ == '__main__':
+        get_fresh_issues_proxy()
