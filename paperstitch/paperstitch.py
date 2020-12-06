@@ -11,6 +11,7 @@ from warnings import warn
 from pathlib import Path
 import shutil
 
+
 def find_articles(driver, url, pattern):
     print(f'Searching {url} for pattern {pattern}')
     try:
@@ -28,8 +29,6 @@ def find_articles(driver, url, pattern):
     paths = list(set(paths))
     print(f'Found articles: {paths}')
     return paths
-
-
 
 
 def make_save_folder(url):
@@ -81,7 +80,6 @@ def prep(use_proxy=False):
 
 def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/issues/369227236?sort=title",
                        driver=None, save_path=None):
-
     # To prevent download dialog
     if not driver:
         driver, save_path = prep()
