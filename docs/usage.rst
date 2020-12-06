@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use Paperstitch in a project::
+To use Nature Polymerase in a project::
 
-    import paperstitch
+    import nature_polymerase

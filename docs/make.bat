@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=paperstitch
+set SPHINXPROJ=nature_polymerase
 
 if "%1" == "" goto help
 

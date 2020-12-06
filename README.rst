@@ -1,26 +1,26 @@
-===========
-Paperstitch
-===========
+=================
+Nature Polymerase
+=================
 
 
-.. image:: https://img.shields.io/pypi/v/paperstitch.svg
-        :target: https://pypi.python.org/pypi/paperstitch
+.. image:: https://img.shields.io/pypi/v/nature_polymerase.svg
+        :target: https://pypi.python.org/pypi/nature_polymerase
 
-.. image:: https://img.shields.io/travis/mmyros/paperstitch.svg
-        :target: https://travis-ci.com/mmyros/paperstitch
+.. image:: https://img.shields.io/travis/mmyros/nature_polymerase.svg
+        :target: https://travis-ci.com/mmyros/nature_polymerase
 
-.. image:: https://readthedocs.org/projects/paperstitch/badge/?version=latest
-        :target: https://paperstitch.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/nature-polymerase/badge/?version=latest
+        :target: https://nature-polymerase.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
 
 
-Stich papers
+Polymerise Nature and Science journals with or without proxy
 
 
 * Free software: MIT license
-* Documentation: https://paperstitch.readthedocs.io.
+* Documentation: https://nature-polymerase.readthedocs.io.
 
 
 Features

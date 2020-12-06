@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install Paperstitch, run this command in your terminal:
+To install Nature Polymerase, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install paperstitch
+    $ pip install nature_polymerase
 
-This is the preferred method to install Paperstitch, as it will always install the most recent stable release.
+This is the preferred method to install Nature Polymerase, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,19 +26,19 @@ you through the process.
 From sources
 ------------
 
-The sources for Paperstitch can be downloaded from the `Github repo`_.
+The sources for Nature Polymerase can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/mmyros/paperstitch
+    $ git clone git://github.com/mmyros/nature_polymerase
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/mmyros/paperstitch/tarball/master
+    $ curl -OJL https://github.com/mmyros/nature_polymerase/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/mmyros/paperstitch
-.. _tarball: https://github.com/mmyros/paperstitch/tarball/master
+.. _Github repo: https://github.com/mmyros/nature_polymerase
+.. _tarball: https://github.com/mmyros/nature_polymerase/tarball/master

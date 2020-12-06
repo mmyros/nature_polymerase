@@ -1,1 +1,1 @@
-"""Unit test package for paperstitch."""
+"""Unit test package for nature_polymerase."""

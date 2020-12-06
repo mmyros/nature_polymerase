@@ -1,4 +1,4 @@
-Welcome to Paperstitch's documentation!
+Welcome to Nature Polymerase's documentation!
 ======================================
 
 .. toctree::
