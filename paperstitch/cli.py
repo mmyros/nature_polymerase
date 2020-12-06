@@ -6,6 +6,7 @@ from paperstitch import paperstitch
 
 @click.command(context_settings={"ignore_unknown_options": True})
 @click.option('--url', default=None)
+@click.option('--use_proxy', default=True)
 def main(url=None, use_proxy=True):
     """Console script for paperstitch."""
     if url is not None:
