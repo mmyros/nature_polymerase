@@ -3,15 +3,17 @@ import sys
 import click
 from paperstitch import paperstitch
 
+
 @click.command(context_settings={"ignore_unknown_options": True})
-@click.option('--url',default=None)
-def main(url=None):
+@click.option('--url', default=None)
+def main(url=None, use_proxy=True):
     """Console script for paperstitch."""
     if url is not None:
         paperstitch.save_journal_issue(url)
-    else:
-        # paperstitch.get_fresh_issues()
+    elif use_proxy:
         paperstitch.get_fresh_issues_proxy()
+    else:
+        paperstitch.get_fresh_issues()
     return 0
 
 
