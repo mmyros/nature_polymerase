@@ -12,8 +12,9 @@ from pathlib import Path
 import shutil
 
 
-def find_articles(driver, url, pattern):
-    print(f'Searching {url} for pattern {pattern}')
+def find_articles(driver, url, pattern, verbose=True):
+    if verbose:
+        print(f'Searching {url} for pattern {pattern}')
     try:
         driver.get(url)
     except TimeoutException:
@@ -34,7 +35,7 @@ def find_articles(driver, url, pattern):
     return paths
 
 
-def make_save_folder(url):
+def get_journal_title(url):
     if 'browzine' in url:
         driver = webdriver.Firefox()
         driver.get(url)
@@ -78,15 +79,16 @@ def prep(use_proxy=False):
         print('Logging you in to ezproxy. I give you 20 seconds')
         driver.get('https://login.ezproxy.nihlibrary.nih.gov/login?url=http://www.nature.com/')
         time.sleep(35)
-    return driver, save_path
+    return driver
 
 
 def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/issues/369227236?sort=title",
-                       driver=None, save_path=None):
+                       driver=None):
     # To prevent download dialog
     if not driver:
-        driver, save_path = prep()
-    save_folder = make_save_folder(url)
+        driver = prep()
+    save_path = make_save_path()
+    journal_title = get_journal_title(url)
     driver.get(url)
     time.sleep(7)
     url = driver.current_url
@@ -103,7 +105,7 @@ def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/is
 
     # Download pdfs
     for path in tqdm(paths):
-        pdfs = find_articles(driver, path, pattern=pdf_pattern)
+        pdfs = find_articles(driver, path, pattern=pdf_pattern, verbose=False)
         if len(pdfs) > 0:
             for pdf in tqdm(pdfs):
                 try:
@@ -112,9 +114,18 @@ def save_journal_issue(url="https://browzine.com/libraries/834/journals/13191/is
                     pass
                 except StaleElementReferenceException:
                     warn('You appear to be behind a paywall!')
-    print(f'cd {save_path}; pdfunite $(ls -tr *.pdf) ../journals/{save_folder}.pdf')
-    os.system(f'cd {save_path}; pdfunite $(ls -tr *.pdf) ../journals/{save_folder}.pdf')
-    print(f'Done! use the following command to open with okular: \nokular ~/Downloads/journals/{save_folder}.pdf')
+
+    print(f'gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite '
+          f'-sOutputFile={(Path("~/Downloads") / "journals").expanduser() / journal_title}.pdf '
+          f'{Path(save_path) / "*.pdf"}')
+
+    os.system(f'gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite '
+              f'-sOutputFile={(Path("~/Downloads") / "journals").expanduser() / journal_title}.pdf '
+              f'{Path(save_path) / "*.pdf"}')
+
+    # print(f'cd {save_path}; pdfunite $(ls -t *.pdf) ../journals/{journal_title}.pdf')
+    # os.system(f'cd {save_path}; pdfunite $(ls -t *.pdf) ../journals/{journal_title}.pdf')
+    print(f'Done! use the following command to open with okular: \nokular ~/Downloads/journals/{journal_title}.pdf')
     # driver.close()
 
 
@@ -129,7 +140,7 @@ def get_fresh_issues():
 
 
 def get_fresh_issues_proxy():
-    driver, save_path = prep(use_proxy=True)
+    driver = prep(use_proxy=True)
     for url in [
         # 'https://www.nature.com/neuro/current-issue',# keep for testing
         # 'https://www.nature.com/nature/current-issue',
@@ -140,7 +151,7 @@ def get_fresh_issues_proxy():
         'https://www-nature-com.ezproxy.nihlibrary.nih.gov/npjschz/current-issue',
         # 'https://www-nature-com.ezproxy.nihlibrary.nih.gov/tp/current-issue',
         'https://science-sciencemag-org.ezproxy.nihlibrary.nih.gov/', ]:
-        save_journal_issue(url, driver, save_path)
+        save_journal_issue(url, driver)
 
     if __name__ == '__main__':
         get_fresh_issues_proxy()
