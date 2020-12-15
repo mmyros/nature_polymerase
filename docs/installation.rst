@@ -4,6 +4,9 @@
 Installation
 ============
 
+Dependencies 
+------------
+sudo apt install firefox-geckodriver
 
 Stable release
 --------------
