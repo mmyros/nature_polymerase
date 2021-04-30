@@ -51,7 +51,7 @@ def get_journal_title(url):
 
 
 def make_save_path():
-    save_path = Path('/home/m/Downloads/journals_temp/')
+    save_path = Path('~/Downloads/journals_temp/').expanduser()
     # Initialize temp directory (make sure it's empty)
     shutil.rmtree(save_path)
     Path.mkdir(save_path, exist_ok=True)
@@ -73,7 +73,7 @@ def prep(use_proxy=False):
 
     # Make selenium driver
     driver = webdriver.Firefox(profile)
-    driver.set_page_load_timeout(8)
+    driver.set_page_load_timeout(10)
     if use_proxy:
         # Log in
         print('Logging you in to ezproxy. I give you 20 seconds')

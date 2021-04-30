@@ -22,6 +22,10 @@ Polymerise Nature and Science journals with or without proxy
 * Free software: MIT license
 * Documentation: https://nature-polymerase.readthedocs.io.
 
+wget https://github.com/mozilla/geckodriver/releases/download/v0.29.1/geckodriver-v0.29.1-linux64.tar.gz
+sudo tar -C /usr/local/bin/ -xvf geckodriver-v0.29.1-linux64.tar.gz
+mkdir ~/Downloads/journals_temp
+sudo apt install firefox-esr
 
 Features
 --------
